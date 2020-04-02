@@ -3,8 +3,8 @@ version: "2"
 services:
   prometheus:
     image: "prom/prometheus:v1.7.1"
-    expose:
-      - 9090
+    ports:
+      - 9090:9090
     depends_on:
       - exporter
     volumes:
@@ -18,7 +18,7 @@ services:
     depends_on:
       - prometheus
     ports:
-      - 127.0.0.1:3000:3000
+      - 3000:3000
     volumes:
       - ../dist:/var/lib/grafana/plugins/grafana-flamegraph-panel
       - ./grafana.db:/var/lib/grafana/grafana.db
@@ -31,11 +31,10 @@ services:
   exporter:
     image: samber/node-promfiler-demo
     ports:
-      - 127.0.0.1:8000:8000
-    expose:
-      - 9142
+      - 8000:8000
+      - 9142:9142
     environment:
-      - PORT=8000
+      - HTTP_PORT=8000
     restart: unless-stopped
 
 volumes:

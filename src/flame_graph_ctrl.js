@@ -86,9 +86,10 @@ class FlameGraphCtrl extends MetricsPanelCtrl {
     let panelTitleOffset = 0;
     if (this.panel.title !== "")
       panelTitleOffset = 25;
-    this.panelWidth = this.getPanelWidthBySpan();
-    this.panelHeight = this.getPanelHeight() - panelTitleOffset;
-    
+
+    // we do not set width & height here
+    // as it is only available within the callback of render
+    // when all other angular components are ready
     this.render();
   }
 
@@ -167,7 +168,7 @@ class FlameGraphCtrl extends MetricsPanelCtrl {
     const columnIdSignature = this.getColumnId(tableData, this.panel.mapping.signatureFieldName);
     const columnIdValue = this.getColumnId(tableData, 'Value');
     
-    if (columnIdSignature == null || columnIdValue == null) {
+    if (columnIdSignature == null) {
       console.error('columns:', tableData.columns);
       console.error('signature column name:', this.panel.mapping.signatureFieldName);
       const error = new Error();
@@ -176,6 +177,11 @@ class FlameGraphCtrl extends MetricsPanelCtrl {
         ' series. FlameGraph Panel expects at least 1 serie with signature column.\n\nResponse:\n'+JSON.stringify(tableData);
       throw error;
     }
+    
+    if (columnIdValue == null) {
+      console.log('this should not happen');
+    }
+
 
     return tableData.rows.reduce((acc, current) => {
       const signature = current[columnIdSignature];
@@ -210,7 +216,7 @@ class FlameGraphCtrl extends MetricsPanelCtrl {
   }
 
   link(scope, elem, attrs, ctrl) {
-    elem = elem.find('.grafana-flamegraph-panel');
+    elem = elem.find('.flame-graph-panel');
     
     function render() {
       if (!ctrl.tree) {
@@ -222,7 +228,8 @@ class FlameGraphCtrl extends MetricsPanelCtrl {
 
       // console.info(ctrl.tree);
       // ctrl.panel.height = 900;
-      // console.log(ctrl.panelWidth);
+      ctrl.panelWidth = elem.width();
+      
       const flameGraph = d3.flameGraph(d3)
         .width(ctrl.panelWidth)
         .cellHeight(18)

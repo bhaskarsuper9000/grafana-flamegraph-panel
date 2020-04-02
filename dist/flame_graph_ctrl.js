@@ -153,9 +153,10 @@ System.register(['app/plugins/sdk', 'app/core/time_series2', 'app/core/utils/kbn
 
             var panelTitleOffset = 0;
             if (this.panel.title !== "") panelTitleOffset = 25;
-            this.panelWidth = this.getPanelWidthBySpan();
-            this.panelHeight = this.getPanelHeight() - panelTitleOffset;
 
+            // we do not set width & height here
+            // as it is only available within the callback of render
+            // when all other angular components are ready
             this.render();
           }
         }, {
@@ -235,13 +236,17 @@ System.register(['app/plugins/sdk', 'app/core/time_series2', 'app/core/utils/kbn
             var columnIdSignature = this.getColumnId(tableData, this.panel.mapping.signatureFieldName);
             var columnIdValue = this.getColumnId(tableData, 'Value');
 
-            if (columnIdSignature == null || columnIdValue == null) {
+            if (columnIdSignature == null) {
               console.error('columns:', tableData.columns);
               console.error('signature column name:', this.panel.mapping.signatureFieldName);
               var error = new Error();
               error.message = 'No data or malformed series';
               error.data = 'Metric query returns ' + tableData.rows.length + ' series. FlameGraph Panel expects at least 1 serie with signature column.\n\nResponse:\n' + JSON.stringify(tableData);
               throw error;
+            }
+
+            if (columnIdValue == null) {
+              console.log('this should not happen');
             }
 
             return tableData.rows.reduce(function (acc, current) {
@@ -278,7 +283,7 @@ System.register(['app/plugins/sdk', 'app/core/time_series2', 'app/core/utils/kbn
         }, {
           key: 'link',
           value: function link(scope, elem, attrs, ctrl) {
-            elem = elem.find('.grafana-flamegraph-panel');
+            elem = elem.find('.flame-graph-panel');
 
             function render() {
               if (!ctrl.tree) {
@@ -290,7 +295,8 @@ System.register(['app/plugins/sdk', 'app/core/time_series2', 'app/core/utils/kbn
 
               // console.info(ctrl.tree);
               // ctrl.panel.height = 900;
-              // console.log(ctrl.panelWidth);
+              ctrl.panelWidth = elem.width();
+
               var flameGraph = d3.flameGraph(d3).width(ctrl.panelWidth).cellHeight(18).transitionDuration(750).transitionEase(d3.easeCubic).sort(true).title("");
 
               d3.select("#chart").datum(ctrl.tree).call(flameGraph);
