@@ -6,13 +6,13 @@
   "info": {
     "description": "Flamegraph panel for grafana",
     "author": {
-      "name": "Samber",
+      "name": "Samber / Oscar",
       "url": "http://samuel-berthe.fr"
     },
     "keywords": ["flamegraph", "panel"],
     "logos": {
-      "small": "src/img/flamegraph_panel_logo.svg",
-      "large": "src/img/flamegraph_panel_logo.svg"
+      "small": "src/img/flamegraph_panel_logo.png",
+      "large": "src/img/flamegraph_panel_logo.png"
     },
     "links": [
       {"name": "Project site", "url": ""},

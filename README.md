@@ -1,4 +1,5 @@
-# [WIP] Grafana Flamegraph Panel
+# Grafana Flamegraph Panel
+---
 
 ## Building flame graphs
 
@@ -7,8 +8,9 @@
 Please read [Brendan Gregg's post](http://www.brendangregg.com/flamegraphs.html)
 
 ## Demo
+**[Grafana live demo](http://grafana.flamegraph.samuel-berthe.fr/d/000000001/demo-flamegraph?orgId=1)** [deprecated]
 
-**[Grafana live demo](http://grafana.flamegraph.samuel-berthe.fr/d/000000001/demo-flamegraph?orgId=1)**
+Look for the demo folder in the [Github repo](github.com/bhaskarsuper9000/grafana-flamegraph-panel) to correctly run it with docker-compose
 
 To generate metrics on the "demo" service (docker samber/node-promfiler-demo), a cronjob executes requests on API regulary.
 
@@ -27,4 +29,4 @@ $ promfiler app.js
 
 ## Credits
 
-This Grafana panel is based on the great library [d3-flamegraph](https://github.com/spiermar/d3-flame-graph), wrote by Spiermar. :clap: :clap:
+This Grafana panel is based on the great library [d3-flamegraph](https://github.com/spiermar/d3-flame-graph), wrote by Spiermar.
